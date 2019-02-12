@@ -1,0 +1,423 @@
+<div *ngIf="user">
+    <h1 style="color:dodgerblue; font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif">
+      Hello Doctor: {{user.name}}
+    </h1>
+    <hr>
+  <div class="container">
+  
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="panel-group">
+          <div class="panel panel-primary">
+            <div class="panel-heading">Manage Patients</div>
+            <div class="panel-body">
+              <div class="container">
+
+                <button type="button" class="btn btn-default " (click)="ViewPatients.open()">Click here</button>
+
+                <!-- Modal -->
+                <modal #ViewPatients (onOpen)="onView()">
+                  <modal-header>
+                    <h1>View Patients</h1>
+                  </modal-header>
+                  <modal-content>
+                    
+                    <table class="table">
+                      <thead>
+                        <tr>
+                          <th>#</th>
+                          <th>Name</th>
+                          <th>Username</th>
+                          <th>User Type</th>
+                          <th>Actions</th>
+                        </tr>
+                      </thead>
+                      
+                        <tr *ngFor="let user of patientData; let i = index">
+
+                          <td>{{i + 1}}</td>
+                          <td>{{user.name}}</td>
+                          <td>{{user.username}}</td>
+                          <td>{{user.userType}}</td>
+                          <td>
+                            <button type="button" class="btn btn-info glyphicon glyphicon-user" (click)="ViewPatientProfile.open()"></button>
+                            <modal #ViewPatientProfile>
+                              <modal-header>
+                                <h1>{{user.name}}</h1>
+                              </modal-header>
+                              <modal-content>
+                                <div class="col-sm-6" style="display:inline-block">
+                                  <ul class="list-group">
+                                    <li class="list-group-item">Name: {{user.name}}</li>
+                                    <li class="list-group-item">Username: {{user.username}}</li>
+                                    <li class="list-group-item">Email: {{user.email}}</li>
+                                    <li class="list-group-item">Address: {{user.address}}</li>
+                                    <li class="list-group-item">Gender: {{user.gender}}</li>
+                                    <li class="list-group-item">Age: {{user.age}}</li>
+                                  </ul>
+                                </div>
+
+                                <div class="col-sm-6" style="display:inline-block">
+                                  <ul class="list-group">
+                                    <li class="list-group-item">Date of Birth: {{user.dob}}</li>
+                                    <li class="list-group-item">Room No: </li>
+                                    <li class="list-group-item">Qualification: {{user.qualification}}</li>
+                                    <li class="list-group-item">Designation: {{user.designation}}</li>
+                                    <li class="list-group-item">Contact: {{user.contactnum}}</li>
+                                  </ul>
+                                </div>
+                              </modal-content>
+                              <modal-footer>
+                              </modal-footer>
+                            </modal>                            
+                          </td>
+                        </tr>
+
+                    </table>
+                  </modal-content>
+                  <modal-footer>
+                  </modal-footer>
+                </modal>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+  
+  <!-- Next three divs -->
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-4">
+        <div class="panel-group">
+            <div class="panel panel-primary">
+                <div class="panel-heading">Manage Appointments</div>
+                <div class="panel-body">
+                  <div class="container">
+                    <button type="button" class="btn btn-default" (click)="CreateAppointment.open()">Create Appointment</button>
+                    <modal #CreateAppointment>
+                      <modal-header>
+                        <h1>Create Appointment</h1>
+                      </modal-header>
+                      <modal-content>
+                        <form (submit)="onAppointmentSubmit()">
+                          <div class="form-group">
+                            <label>Name</label>
+                            <select [(ngModel)]="name" name="name" class="form-control ">
+                                <option [ngValue]="undefined" disabled selected>Select Patient</option>
+                                <option *ngFor="let user of patientData">{{user.name}}</option>
+                              </select>
+                          </div>
+                          <div class="form-group">
+                              <label>Doctor Name</label>
+                              <input type="text" [(ngModel)]="drname" name="drname" class="form-control" placeholder="{{user.name}}">
+                          </div>
+                          <div class="form-group">
+                            <label>Appointment Type</label>
+                            <input type="text" [(ngModel)]="aptType" name="aptType" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Appointment Status</label>
+                            <input type="text" [(ngModel)]="aptStatus" name="aptStatus" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Appointment Date Created</label>
+                            <input type="text" [(ngModel)]="aptDateCreated" name="aptDateCreated" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Contact Number</label>
+                            <input type="text" [(ngModel)]="contactnum" name="contactnum" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Appointment Date</label>
+                            <input type="text" [(ngModel)]="aptDate" name="aptDate" class="form-control">
+                          </div>
+                          <input type="submit" class="btn btn-primary" value="Create">
+                        </form>
+                      </modal-content>
+                      <modal-footer>
+                      </modal-footer>
+                    </modal>
+    
+                    <button type="button" class="btn btn-default" (click)="ViewAppointments.open()">View Appointments</button>
+    
+    
+                    <div class="row">
+    
+                      <modal #ViewAppointments (onOpen)="onAppointmentView()" modalClass="modal-lg">
+                        <modal-header>
+                          <h1>View Appointments</h1>
+                        </modal-header>
+                        <modal-content>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Patient Name</th>
+                                <th>Doctor Name</th>
+                                <th>Appointment Type</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+    
+                            <ng-container *ngFor="let appointment of aptData; let i = index"> 
+                              <tr *ngIf="appointment.drname==user.name" >
+                              <td>{{i + 1}}</td>
+                              <td>{{appointment.name}}</td>
+                              <td>{{appointment.drname}}</td>
+                              <td>{{appointment.aptType}}</td>
+                              <td>
+                                <button type="button" class="btn btn-info  glyphicon glyphicon-user" (click)="ViewAppointment.open()"></button>
+                                <modal #ViewAppointment>
+                                  <modal-header>
+                                    <h1>Patient Name: {{appointment.name}}</h1>
+                                  </modal-header>
+                                  <modal-content>
+                                    <div class="col-sm-6" style="display:inline-block">
+                                      <ul class="list-group">
+                                        <li class="list-group-item">Patient Name: {{appointment.name}}</li>
+                                        <li class="list-group-item">Doctor Name: {{appointment.drname}}</li>
+                                        <li class="list-group-item">Appointment Type: {{appointment.aptType}}</li>
+                                        <li class="list-group-item">Appointment Status: {{appointment.aptStatus}}</li>
+                                      </ul>
+                                    </div>
+    
+                                    <div class="col-sm-6" style="display:inline-block">
+                                      <ul class="list-group">
+                                        <li class="list-group-item">Appointment Creation Date: {{appointment.aptDateCreated}}</li>
+                                        <li class="list-group-item">Appointment Date: {{appointment.aptDate}}</li>
+                                        <li class="list-group-item">Contact Num: {{appointment.contactnum}}</li>
+                                      </ul>
+                                    </div>
+                                  </modal-content>
+                                  <modal-footer>
+                                  </modal-footer>
+                                </modal>
+                                <button type="button" class="btn btn-primary  glyphicon glyphicon-edit" (click)="EditAppointment.open()"></button>
+                                <modal #EditAppointment (ngSubmit)="onUpdateApt(user)">
+                                  <modal-header>
+                                    <h1>Edit Profile</h1>
+                                  </modal-header>
+                                  <modal-content>
+                                    <form #myForm="ngForm" (ngSubmit)="onUpdateApt(appointment)">
+                                      <div class="col-sm-6" style="display:inline-block">
+                                        <div class="form-group">
+                                          <label>Name</label>
+                                          <input type="text" [(ngModel)]="appointment.name" name="name" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Doctor Name</label>
+                                          <input type="text" [(ngModel)]="appointment.drname" name="drname" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Appointment Type</label>
+                                          <input type="text" [(ngModel)]="appointment.aptType" name="apyType" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Appointment Status</label>
+                                          <input type="text" [(ngModel)]="appointment.aptStatus" name="aptStatus" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Contact Number</label>
+                                          <input type="text" [(ngModel)]="appointment.contactnum" name="contactnum" class="form-control">
+                                        </div>
+                                      </div>
+    
+                                      <button type="submit" class="btn btn-success">Submit</button>
+                                    </form>
+                                  </modal-content>
+                                  <modal-footer>
+    
+                                  </modal-footer>
+                                </modal>
+    
+                                <button type="button" class="btn btn-danger  glyphicon glyphicon-trash" (click)="OnDeleteAppointment(appointment._id, i)"></button>
+                              </td>
+                            </tr>
+                          </ng-container>
+    
+                          </table>
+                        </modal-content>
+                        <modal-footer>
+                        </modal-footer>
+                      </modal>
+                    </div>
+    
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+  
+      <div class="col-sm-4">
+          <div class="panel-group">
+            <div class="panel panel-primary">
+              <div class="panel-heading">Manage Prescription</div>
+              <div class="panel-body">
+                  <div class="container">
+                    <button type="button" class="btn btn-default" (click)="CreatePrescription.open()">Create Prescription</button>
+                    <modal #CreatePrescription>
+                      <modal-header>
+                        <h1>Create Prescription</h1>
+                      </modal-header>
+                      <modal-content>
+                        <form (submit)="onPrescriptionSubmit()">
+                          <div class="form-group">
+                            <label>Name</label>
+                            <select [(ngModel)]="name" name="name" class="form-control ">
+                                <option [ngValue]="undefined" disabled selected>Select Patient</option>
+                                <option *ngFor="let user of patientData">{{user.name}}</option>
+                              </select>
+                          </div>
+                          <div class="form-group">
+                              <label>Doctor Name</label>
+                              <input type="text" [(ngModel)]="drname" name="drname" class="form-control" placeholder="{{user.name}}">
+                          </div>
+                          <div class="form-group">
+                            <label>Prescription Type</label>
+                            <input type="text" [(ngModel)]="prsType" name="prsType" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Prescription Status</label>
+                            <input type="text" [(ngModel)]="prsStatus" name="prsStatus" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Prescription Date Created</label>
+                            <input type="text" [(ngModel)]="prsDateCreated" name="prsDateCreated" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Contact Number</label>
+                            <input type="text" [(ngModel)]="contactnum" name="contactnum" class="form-control">
+                          </div>
+                          <div class="form-group">
+                            <label>Prescription Date</label>
+                            <input type="text" [(ngModel)]="prsDate" name="aptDate" class="form-control">
+                          </div>
+                          <div class="form-group">
+                              <label>Bill Amount</label>
+                              <input type="text" [(ngModel)]="prsbill" name="prsbill" class="form-control">
+                            </div>
+                          <input type="submit" class="btn btn-primary" value="Create">
+                        </form>
+                      </modal-content>
+                      <modal-footer>
+                      </modal-footer>
+                    </modal>
+    
+                    <button type="button" class="btn btn-default" (click)="ViewPrescriptions.open()">View Prescriptions</button>
+    
+    
+                    <div class="row">
+    
+                      <modal #ViewPrescriptions (onOpen)="onPrescriptionView()" modalClass="modal-lg">
+                        <modal-header>
+                          <h1>View Prescriptions</h1>
+                        </modal-header>
+                        <modal-content>
+                          <table class="table">
+                            <thead>
+                              <tr>
+                                <th>#</th>
+                                <th>Patient Name</th>
+                                <th>Doctor Name</th>
+                                <th>Prescription Type</th>
+                                <th>Bill Ammount</th>
+                                <th>Actions</th>
+                              </tr>
+                            </thead>
+    
+                            <tr *ngFor="let prescription of prsData; let i = index">
+    
+                              <td>{{i + 1}}</td>
+                              <td>{{prescription.name}}</td>
+                              <td>{{prescription.drname}}</td>
+                              <td>{{prescription.aptType}}</td>
+                              <td>{{prescription.prsbill}}</td>
+                              <td>
+                                <button type="button" class="btn btn-info  glyphicon glyphicon-user" (click)="ViewPrescription.open()"></button>
+                                <modal #ViewPrescription>
+                                  <modal-header>
+                                    <h1>Patient Name: {{prescription.name}}</h1>
+                                  </modal-header>
+                                  <modal-content>
+                                    <div class="col-sm-6" style="display:inline-block">
+                                      <ul class="list-group">
+                                        <li class="list-group-item">Patient Name: {{prescription.name}}</li>
+                                        <li class="list-group-item">Doctor Name: {{prescription.drname}}</li>
+                                        <li class="list-group-item">Prescription Type: {{prescription.aptType}}</li>
+                                        <li class="list-group-item">Prescription Status: {{prescription.aptStatus}}</li>
+                                      </ul>
+                                    </div>
+    
+                                    <div class="col-sm-6" style="display:inline-block">
+                                      <ul class="list-group">
+                                        <li class="list-group-item">Prescription Creation Date: {{prescription.aptDateCreated}}</li>
+                                        <li class="list-group-item">Prescription Date: {{prescription.aptDate}}</li>
+                                        <li class="list-group-item">Contact Num: {{prescription.contactnum}}</li>
+                                        <li class="list-group-item">Bill: {{prescription.prsbill}}</li>
+                                      </ul>
+                                    </div>
+                                  </modal-content>
+                                  <modal-footer>
+                                  </modal-footer>
+                                </modal>
+                                <button type="button" class="btn btn-primary  glyphicon glyphicon-edit" (click)="EditPrescription.open()"></button>
+                                <modal #EditPrescription (ngSubmit)="onUpdateApt(user)">
+                                  <modal-header>
+                                    <h1>Edit Profile</h1>
+                                  </modal-header>
+                                  <modal-content>
+                                    <form #myForm="ngForm" (ngSubmit)="onUpdatePrs(prescription)">
+                                      <div class="col-sm-6" style="display:inline-block">
+                                        <div class="form-group">
+                                          <label>Name</label>
+                                          <input type="text" [(ngModel)]="prescription.name" name="name" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Doctor Name</label>
+                                          <input type="text" [(ngModel)]="prescription.drname" name="drname" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Prescription Type</label>
+                                          <input type="text" [(ngModel)]="prescription.prsType" name="prsType" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Prescription Status</label>
+                                          <input type="text" [(ngModel)]="prescription.prsStatus" name="prsStatus" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                          <label>Contact Number</label>
+                                          <input type="text" [(ngModel)]="prescription.contactnum" name="contactnum" class="form-control">
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Bill Amount</label>
+                                            <input type="text" [(ngModel)]="prescription.prsbill" name="prsbill" class="form-control">
+                                          </div>
+                                      </div>
+    
+                                      <button type="submit" class="btn btn-success">Submit</button>
+                                    </form>
+                                  </modal-content>
+                                  <modal-footer>
+    
+                                  </modal-footer>
+                                </modal>
+    
+                                <button type="button" class="btn btn-danger  glyphicon glyphicon-trash" (click)="OnDeletePrescription(prescription._id, i)"></button>
+                              </td>
+                            </tr>
+    
+                          </table>
+                        </modal-content>
+                        <modal-footer>
+                        </modal-footer>
+                      </modal>
+                    </div>
+    
+                  </div>
+                </div>
+              </div>
+        </div>
+      </div>
+    </div>
+    </div></div></div>
+   
